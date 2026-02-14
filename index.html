@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MHT CET Prep - Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="brand">
+            <i class="fas fa-graduation-cap"></i>
+            <div>CET<span>Topper</span></div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item active" onclick="showSection('home')">
+                <i class="fas fa-home"></i> <span>Dashboard</span>
+            </li>
+
+            <li class="nav-item" onclick="showSection('analytics')">
+                <i class="fas fa-chart-pie"></i> <span>Analytics</span>
+            </li>
+
+            <li class="nav-item" onclick="showSection('leaderboard')">
+                <i class="fas fa-trophy"></i> <span>Leaderboard</span>
+            </li>
+
+            <li class="nav-item" onclick="showSection('bookmarks')">
+                <i class="fas fa-bookmark"></i> <span>Saved Qs</span>
+            </li>
+
+            <li class="nav-item" onclick="window.location.href='profile.html'">
+                <i class="fas fa-user"></i> <span>Profile</span>
+            </li>
+        </ul>
+
+        <div class="nav-bottom">
+            <div class="user-mini-profile" onclick="window.location.href='profile.html'" style="cursor: pointer;">
+                <div class="user-avatar">AD</div>
+                <div style="font-size: 0.85rem;">
+                    <div style="font-weight: 600;">Abhijeet D.</div>
+                    <div style="color: #94a3b8; font-size: 0.75rem;">Premium User</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header>
+            <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
+                <button id="toggle-sidebar" class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div id="header-text">
+                    <h1>Dashboard</h1>
+                    <p class="subtitle">Welcome back, future topper!</p>
+                </div>
+            </div>
+
+            <button id="back-btn" class="cta-btn" style="display: none; background: #64748b;"
+                onclick="showSection('home')">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </header>
+
+        <!-- HOME VIEW -->
+        <div id="home-view" class="view-section">
+
+            <!-- Hero Section -->
+            <section class="visual-hero">
+                <div class="hero-left">
+                    <span class="top-tag">#1 MHT CET Prep Platform</span>
+                    <h1>Ace Your <span class="text-highlight">MHT CET</span><br>With Confidence</h1>
+                    <p>Practice with realistic mock tests, get detailed performance analysis, and compete with thousands
+                        of students across Maharashtra.</p>
+
+                    <div class="hero-search-bar">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="Search for chapter, subject or test...">
+                        <button class="search-btn" onclick="performSearch()">Search</button>
+                    </div>
+                </div>
+
+                <div class="hero-right">
+                    <div class="circle-bg"></div>
+                    <div class="student-illustration">
+                        <i class="fas fa-user-graduate" style="font-size: 8rem; color: #4f46e5;"></i>
+                    </div>
+                    <!-- Floating Cards -->
+                    <div class="float-card card-1">
+                        <i class="fas fa-check-circle"></i> 500+ Mock Tests
+                    </div>
+                    <div class="float-card card-2">
+                        <i class="fas fa-chart-line"></i> AI Analytics
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Grid -->
+            <section class="stats-section">
+                <!-- Exam Countdown -->
+                <div class="info-card gradient-card">
+                    <div class="card-content">
+                        <div>
+                            <span class="chip-white"><i class="far fa-clock"></i> Exam Date</span>
+                            <h2 id="examCountdown">-- Days Left</h2>
+                            <p style="opacity: 0.9; font-size: 0.9rem;" id="examDateTarget">Target: Top 100</p>
+                        </div>
+                        <div class="circular-progress">
+                            <span style="font-size: 1.2rem; font-weight: 700;">84%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weak Area -->
+                <div class="info-card" style="border-left: 5px solid #ef4444;">
+                    <div style="margin-bottom: 10px;">
+                        <span class="badge" style="background: #fef2f2; color: #ef4444;"><i
+                                class="fas fa-exclamation-circle"></i> Focus Area</span>
+                    </div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 5px;">Rotational Dynamics</h3>
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 15px;">Physics • Accuracy: 42%</p>
+                    <button class="text-btn red-text"
+                        style="background:none; border:none; color:#ef4444; font-weight:600; cursor:pointer;"
+                        onclick="showSubjectTests('Physics')">Practice Now <i class="fas fa-arrow-right"></i></button>
+                </div>
+
+                <!-- Consistency Streak -->
+                <div class="info-card" style="background: #1e293b; color: white;">
+                    <div style="text-align: center;">
+                        <i class="fas fa-fire" style="font-size: 2.5rem; color: #f59e0b; margin-bottom: 10px;"></i>
+                        <h3 style="font-size: 1.5rem;" id="streak-display">--</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;" id="streak-msg">Start a test to build streak!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Categories -->
+            <h2 class="section-heading">Start Practicing</h2>
+            <div class="categories-grid">
+                <div class="cat-card" onclick="showSection('full-length')">
+                    <div class="cat-icon blue-bg"><i class="fas fa-layer-group"></i></div>
+                    <h3>Full Length Mocks</h3>
+                    <p class="text-muted" style="margin-top: 5px;">200 Marks • PCB/PCM</p>
+                </div>
+
+                <div class="cat-card" onclick="showSection('unit-tests')">
+                    <div class="cat-icon purple-bg"><i class="fas fa-cube"></i></div>
+                    <h3>Unit Tests</h3>
+                    <p class="text-muted" style="margin-top: 5px;">50 Marks • Multi-Chapter</p>
+                </div>
+
+                <div class="cat-card" onclick="showSection('subjects')">
+                    <div class="cat-icon green-bg"><i class="fas fa-book-open"></i></div>
+                    <h3>Subject-wise</h3>
+                    <p class="text-muted" style="margin-top: 5px;">25 Marks • Chapter Focus</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FULL LENGTH TESTS VIEW -->
+        <div id="full-length-view" class="view-section" style="display: none;">
+            <div class="test-grid" id="full-length-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- UNIT TESTS VIEW -->
+        <div id="unit-tests-view" class="view-section" style="display: none;">
+            <div class="test-grid" id="unit-tests-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- SUBJECT SELECTION VIEW -->
+        <div id="subjects-view" class="view-section" style="display: none;">
+            <h2 class="section-heading">Select Subject</h2>
+            <div class="categories-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="cat-card" onclick="showSubjectTests('Physics')">
+                    <div class="cat-icon blue-bg"><i class="fas fa-atom"></i></div>
+                    <h3>Physics</h3>
+                </div>
+                <div class="cat-card" onclick="showSubjectTests('Chemistry')">
+                    <div class="cat-icon orange-bg"><i class="fas fa-flask"></i></div>
+                    <h3>Chemistry</h3>
+                </div>
+                <div class="cat-card" onclick="showSubjectTests('Maths')">
+                    <div class="cat-icon red-bg"><i class="fas fa-calculator"></i></div>
+                    <h3>Maths</h3>
+                </div>
+                <div class="cat-card" onclick="showSubjectTests('Biology')">
+                    <div class="cat-icon green-bg"><i class="fas fa-dna"></i></div>
+                    <h3>Biology</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAPTER TESTS VIEW -->
+        <div id="chapter-tests-view" class="view-section" style="display: none;">
+            <h2 class="section-heading" id="subject-title">Chapter Tests</h2>
+            <div class="test-grid" id="chapter-tests-grid">
+                <!-- Injected via JS -->
+            </div>
+            <!-- SEARCH RESULTS VIEW -->
+            <div id="search-results-view" class="view-section" style="display: none;">
+                <h2 class="section-heading">Search Results</h2>
+                <div class="test-grid" id="search-results-grid">
+                    <!-- Injected via JS -->
+                </div>
+                <button class="cta-btn" style="background:#64748b; margin-top:20px;" onclick="showSection('home')">Back
+                    to Home</button>
+            </div>
+
+            <!-- ANALYTICS VIEW -->
+            <div id="analytics-view" class="view-section" style="display: none;">
+                <!-- KPI Cards -->
+                <div class="analytics-kpi-grid">
+                    <div class="kpi-card">
+                        <div class="cat-icon blue-bg" style="width: 50px; height: 50px; font-size: 1.2rem; margin: 0;">
+                            <i class="fas fa-flask"></i></div>
+                        <div>
+                            <p>Tests Taken</p>
+                            <h3>24</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="cat-icon green-bg" style="width: 50px; height: 50px; font-size: 1.2rem; margin: 0;">
+                            <i class="fas fa-check-circle"></i></div>
+                        <div>
+                            <p>Avg Accuracy</p>
+                            <h3>76%</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="cat-icon orange-bg"
+                            style="width: 50px; height: 50px; font-size: 1.2rem; margin: 0;"><i class="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <p>Avg Speed/Q</p>
+                            <h3>42s</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="cat-icon purple-bg"
+                            style="width: 50px; height: 50px; font-size: 1.2rem; margin: 0;"><i
+                                class="fas fa-trophy"></i></div>
+                        <div>
+                            <p>Best Score</p>
+                            <h3>168/200</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-container"
+                    style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="chart-card"
+                        style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: var(--shadow-sm);">
+                        <h3 style="margin-bottom: 1rem;">Performance Trajectory</h3>
+                        <div style="height: 300px;"><canvas id="scoreChart"></canvas></div>
+                    </div>
+                    <div class="chart-card"
+                        style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: var(--shadow-sm);">
+                        <h3 style="margin-bottom: 1rem;">Subject Strength</h3>
+                        <div style="height: 300px; display: flex; justify-content: center;"><canvas
+                                id="subjectChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD VIEW -->
+            <div id="leaderboard-view" class="view-section" style="display: none;">
+                <!-- Your Rank Banner -->
+                <div
+                    style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 2rem; border-radius: 20px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 2rem; box-shadow: var(--shadow-lg);">
+                    <div style="text-align: center;">
+                        <span style="opacity: 0.7; font-size: 0.9rem;">Your Rank</span>
+                        <h1 style="font-size: 2.5rem; margin: 5px 0;" id="user-rank">--</h1>
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="opacity: 0.7; font-size: 0.9rem;">Mock Score</span>
+                        <h1 style="font-size: 2.5rem; margin: 5px 0; color: #818cf8;" id="user-score-display">--<span
+                                style="font-size: 1rem; color: #94a3b8;">/200</span></h1>
+                    </div>
+                    <div
+                        style="background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 8px 16px; border-radius: 20px; font-weight: 600;">
+                        <i class="fas fa-arrow-up"></i> Top 15%
+                    </div>
+                </div>
+
+                <div class="leaderboard-tabs" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <button class="tab-btn active"
+                        style="padding: 10px 20px; background: white; border: none; border-radius: 8px; font-weight: 600; color: var(--primary); box-shadow: var(--shadow-sm); cursor: pointer;"
+                        onclick="switchLeaderboard('school')">School</button>
+                    <button class="tab-btn"
+                        style="padding: 10px 20px; background: transparent; border: none; border-radius: 8px; font-weight: 600; color: var(--text-muted); cursor: pointer;"
+                        onclick="switchLeaderboard('global')">Global State</button>
+                </div>
+
+                <!-- Podium -->
+                <div class="podium-container" id="podium-display"
+                    style="display: flex; justify-content: center; align-items: flex-end; height: 200px; margin-bottom: 2rem; gap: 1rem;">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- List -->
+                <div style="background: white; border-radius: 16px; padding: 1rem; box-shadow: var(--shadow-sm);">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #f1f5f9; text-align: left;">
+                                <th style="padding: 15px; color: var(--text-muted);">Rank</th>
+                                <th style="padding: 15px; color: var(--text-muted);">Student</th>
+                                <th style="padding: 15px; color: var(--text-muted);">Accuracy</th>
+                                <th style="padding: 15px; color: var(--text-muted); text-align: right;">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

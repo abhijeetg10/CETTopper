@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CETTopper</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1><i class="fas fa-graduation-cap"></i> CETTopper</h1>
+            <p style="color: var(--text-light);">Welcome back! Please login.</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" required placeholder="student@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                Login
+            </button>
+
+            <div style="text-align: center; margin: 1.5rem 0; color: #64748b; position: relative;">
+                <span style="background: white; padding: 0 10px; position: relative; z-index: 1;">OR</span>
+                <div
+                    style="position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #e2e8f0; z-index: 0;">
+                </div>
+            </div>
+
+            <button type="button" onclick="handleGoogleLogin()"
+                style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border: 1px solid #e2e8f0; background: white; border-radius: 8px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.2s;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                    style="width: 20px;">
+                Continue with Google
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 1.5rem; color: var(--text-light); font-size: 0.9rem;">
+            Don't have an account? <a href="signup.html"
+                style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign Up</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                alert('Login failed: ' + err.message);
+            }
+        });
+
+        // Mock Google Login
+        function handleGoogleLogin() {
+            // In a real app, integrate Firebase Auth or Google Identity Services here.
+            // For now, allow simulation for demo purposes.
+            const mockGoogleUser = {
+                name: "Google User (Demo)",
+                email: "google_demo@example.com",
+                role: "student",
+                isGoogle: true
+            };
+
+            // Allow user to simulate
+            if (confirm("Simulate Google Login? (In production, this would open the Google OAuth popup)")) {
+                localStorage.setItem('user', JSON.stringify(mockGoogleUser));
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+
+</html>
