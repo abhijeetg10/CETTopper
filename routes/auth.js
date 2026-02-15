@@ -133,4 +133,59 @@ router.post('/verify-mobile', authenticateToken, async (req, res) => {
 });
 
 
+
+// POST /google (Google Login)
+router.post('/google', async (req, res) => {
+    try {
+        const { token } = req.body;
+        const { OAuth2Client } = require('google-auth-library');
+        const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+        const payload = ticket.getPayload();
+
+        const { email, name, sub: googleId } = payload;
+
+        // Check if user exists
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Register new user
+            user = new User({
+                name,
+                email,
+                password: await bcrypt.hash(Math.random().toString(36), 10), // Random password
+                role: 'student',
+                isMobileVerified: true // Trust Google
+            });
+            await user.save();
+        }
+
+        // Generate Token
+        const jwtToken = jwt.sign(
+            { id: user._id, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.json({
+            success: true,
+            token: jwtToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+    } catch (err) {
+        console.error("Google Auth Error:", err);
+        res.status(400).json({ error: 'Google authentication failed' });
+    }
+});
+
 module.exports = router;

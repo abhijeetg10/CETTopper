@@ -94,12 +94,13 @@
                 </div>
             </div>
 
-            <button type="button" onclick="handleGoogleLogin()"
-                style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border: 1px solid #e2e8f0; background: white; border-radius: 8px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.2s;">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
-                    style="width: 20px;">
-                Continue with Google
-            </button>
+            <div id="g_id_onload"
+                data-client_id="810550517414-o3dqoe5td4donnl9v88cke6vopr16469.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse" data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
+                data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left" data-width="320">
+            </div>
         </form>
 
         <p style="text-align: center; margin-top: 1.5rem; color: var(--text-light); font-size: 0.9rem;">
@@ -135,24 +136,30 @@
             }
         });
 
-        // Mock Google Login
-        function handleGoogleLogin() {
-            // In a real app, integrate Firebase Auth or Google Identity Services here.
-            // For now, allow simulation for demo purposes.
-            const mockGoogleUser = {
-                name: "Google User (Demo)",
-                email: "google_demo@example.com",
-                role: "student",
-                isGoogle: true
-            };
+        // Google Login Callback
+        async function handleCredentialResponse(response) {
+            try {
+                const res = await fetch('/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: response.credential })
+                });
 
-            // Allow user to simulate
-            if (confirm("Simulate Google Login? (In production, this would open the Google OAuth popup)")) {
-                localStorage.setItem('user', JSON.stringify(mockGoogleUser));
-                window.location.href = 'index.html';
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                alert('Google Login failed: ' + err.message);
             }
         }
     </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 
 </html>
