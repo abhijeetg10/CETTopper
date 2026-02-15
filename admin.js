@@ -55,7 +55,7 @@ async function fetchStudents() {
     tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:3000/api/admin/users', {
+        const res = await fetch('/api/admin/users', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const users = await res.json();
@@ -76,7 +76,7 @@ async function fetchResults() {
     tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:3000/api/admin/results', {
+        const res = await fetch('/api/admin/results', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const results = await res.json();
@@ -101,9 +101,9 @@ async function loadDashboardStats() {
 
         // Fetch parallel
         const [testsRes, usersRes, resultsRes] = await Promise.all([
-            fetch('http://localhost:3000/api/tests', { headers }),
-            fetch('http://localhost:3000/api/admin/users', { headers }),
-            fetch('http://localhost:3000/api/admin/results', { headers })
+            fetch('/api/tests', { headers }),
+            fetch('/api/admin/users', { headers }),
+            fetch('/api/admin/results', { headers })
         ]);
 
         const tests = await testsRes.json();
@@ -116,7 +116,7 @@ async function loadDashboardStats() {
         animateValue("stat-attempts", 0, results.length || 0, 1000);
 
         // Load Exam Date
-        const dateRes = await fetch('http://localhost:3000/api/settings/exam-date');
+        const dateRes = await fetch('/api/settings/exam-date');
         const dateData = await dateRes.json();
         if (dateData.examDate) {
             document.getElementById('examDateInput').value = dateData.examDate.split('T')[0];
@@ -135,7 +135,7 @@ async function saveExamDate() {
 
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:3000/api/admin/settings/exam-date', {
+        const res = await fetch('/api/admin/settings/exam-date', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -247,7 +247,7 @@ document.getElementById('createTestForm').addEventListener('submit', async (e) =
         });
 
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/tests', {
+        const response = await fetch('/api/tests', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ async function fetchTestsList() {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/tests', {
+        const response = await fetch('/api/tests', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const tests = await response.json();
@@ -326,7 +326,7 @@ async function deleteTest(testId) {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/tests/${testId}`, {
+        const response = await fetch(`/api/tests/${testId}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });

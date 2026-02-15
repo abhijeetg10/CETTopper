@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!otp) return;
 
         try {
-            const res = await fetch('http://localhost:3000/api/auth/verify-mobile', {
+            const res = await fetch('/api/auth/verify-mobile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadProfile(token) {
     try {
-        const res = await fetch('http://localhost:3000/api/auth/profile', {
+        const res = await fetch('/api/auth/profile', {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -99,7 +99,7 @@ async function updateProfile(token) {
     const className = document.getElementById('className').value;
 
     try {
-        const res = await fetch('http://localhost:3000/api/auth/profile', {
+        const res = await fetch('/api/auth/profile', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

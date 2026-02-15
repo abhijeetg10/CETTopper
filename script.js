@@ -37,7 +37,7 @@ function setupNavigation() {
 
 async function loadExamCountdown() {
     try {
-        const res = await fetch('http://localhost:3000/api/settings/exam-date');
+        const res = await fetch('/api/settings/exam-date');
         const data = await res.json();
         const el = document.getElementById('examCountdown');
         const targetEl = document.getElementById('examDateTarget');
@@ -128,7 +128,7 @@ let allTests = []; // Store fetched tests globally
 
 async function fetchTests() {
     try {
-        const response = await authFetch('http://localhost:3000/api/tests');
+        const response = await authFetch('/api/tests');
         allTests = await response.json(); // Store in global variable
 
         if (allTests.length > 0) {
@@ -175,7 +175,7 @@ let currentLeaderboardData = { school: [], global: [] };
 
 async function fetchLeaderboard(type = 'school') {
     try {
-        const response = await authFetch('http://localhost:3000/api/leaderboard');
+        const response = await authFetch('/api/leaderboard');
         const data = await response.json();
         currentLeaderboardData = data;
 
@@ -188,7 +188,7 @@ async function fetchLeaderboard(type = 'school') {
 
 async function fetchAnalytics() {
     try {
-        const response = await authFetch('http://localhost:3000/api/user/analytics');
+        const response = await authFetch('/api/user/analytics');
         const data = await response.json();
         renderAnalyticsUI(data);
     } catch (err) {

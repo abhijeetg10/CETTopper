@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadTestFromApi(testId, token) {
     try {
-        const response = await fetch(`http://localhost:3000/api/tests/${testId}`, {
+        const response = await fetch(`/api/tests/${testId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -202,7 +202,7 @@ async function submitTest() {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/submit', {
+        const response = await fetch('/api/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
