@@ -1,4 +1,6 @@
+console.log("Starting Server initialization...");
 require('dotenv').config();
+console.log("Environment variables loaded.");
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
