@@ -126,16 +126,24 @@
                     body: JSON.stringify({ name, email, password })
                 });
 
-                const data = await res.json();
+                let data;
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    data = await res.json();
+                } else {
+                    const text = await res.text();
+                    throw new Error("Server returned non-JSON response: " + res.status + " " + text.substring(0, 50));
+                }
 
                 if (res.ok) {
                     alert('Registration successful! Please login.');
                     window.location.href = 'login.html';
                 } else {
-                    alert(data.error);
+                    alert(data.error || "Registration failed with status " + res.status);
                 }
             } catch (err) {
-                alert('Registration failed: ' + err.message);
+                console.error(err);
+                alert('Registration failed. Check console for details. Error: ' + err.message);
             }
         });
 

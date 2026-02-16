@@ -115,6 +115,9 @@ async function authFetch(url, options = {}) {
     };
     const response = await fetch(url, { ...options, headers });
     if (response.status === 401 || response.status === 403) {
+        console.warn("Session expired or unauthorized. Redirecting to login.");
+        // Optional: Alert user instead of silent redirect if debugging
+        // alert("Session expired. Please login again.");
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         window.location.href = 'login.html';
