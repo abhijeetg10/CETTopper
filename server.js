@@ -39,7 +39,25 @@ const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 app.use('/api', apiRoutes);
 
+// --- Global Error Handling for Deployment Debugging ---
+process.on('uncaughtException', (err) => {
+    console.error('CRITICAL ERROR: Uncaught Exception:', err);
+    // Keep process alive for a moment to ensure logs are flushed if possible, but usually best to exit.
+    // For debugging Render loops, we want to see this.
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('CRITICAL ERROR: Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1);
+});
+
 // --- Start Server ---
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`Using Node Environment: ${process.env.NODE_ENV || 'development'}`);
+});
+
+server.on('error', (err) => {
+    console.error('SERVER LISTEN ERROR:', err);
 });
